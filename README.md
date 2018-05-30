@@ -7,4 +7,4 @@ Inlude also Sani Singh Huttunen permutation algorithm implementation which is th
 
 Implementation of permutation heap algorithm (fastest way to generate all permutations) in single thread.
 Implementation of an algorithm which index each permutation and reverse of it.
-Implementation of the fastest multithreaded implementation of an algorithm that generate all permutations.
+Implementation of the fastest multithreaded implementation of an algorithm that generate all permutations using a mix of Sani Singh Huttunen algorithm and my algorithm which index each permutation.
