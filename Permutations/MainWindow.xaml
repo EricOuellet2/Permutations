@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Permutations"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1500">
 	<Window.DataContext>
@@ -75,7 +76,10 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 
-			<Button Grid.Row="3" Grid.Column="2" Click="ButtonBaseOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Start Test</Button>
+			<StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
+				<Button Click="ButtonStartTestOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Start Test</Button>
+				<Button Click="ButtonFillGraphicOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Fill the graph</Button>
+			</StackPanel>
 
 		</Grid>
 
@@ -90,37 +94,57 @@
 				<RowDefinition Height="Auto"></RowDefinition>
 			</Grid.RowDefinitions>
 
-			<ListBox Name="ListBoxResults" 
-				ItemsSource="{Binding Results}" 
-				IsSynchronizedWithCurrentItem="True"
-				Background="LightYellow" Grid.ColumnSpan="3" ></ListBox>
+			<Grid  Grid.ColumnSpan="3">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"></ColumnDefinition>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+
+				<ListBox Name="ListBoxResults" 
+						ItemsSource="{Binding Results}" 
+						IsSynchronizedWithCurrentItem="True"
+						Background="LightYellow" ></ListBox>
+
+				<GridSplitter Grid.Column="1"
+							  Width="7" 
+							  Background="Gray" 
+							  HorizontalAlignment="Stretch"
+							  ></GridSplitter>
+
+				<oxy:PlotView Grid.Column="2" Name="PlotViewMain" />
+
+			</Grid>
 		</Grid>
 
 		<StatusBar Grid.Row="2">
-				<StatusBar.ItemsPanel>
-					<ItemsPanelTemplate>
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="*"/>
-							</Grid.ColumnDefinitions>
-						</Grid>
-					</ItemsPanelTemplate>
-				</StatusBar.ItemsPanel>
+			<StatusBar.ItemsPanel>
+				<ItemsPanelTemplate>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+					</Grid>
+				</ItemsPanelTemplate>
+			</StatusBar.ItemsPanel>
 
-				<StatusBarItem Grid.Column="0">
-					<TextBlock><Hyperlink NavigateUri="https://stackoverflow.com/questions/11208446/generating-permutations-of-a-set-most-efficiently" RequestNavigate="HyperlinkOnRequestNavigate">StackOverflow related question</Hyperlink></TextBlock>
-				</StatusBarItem>
+			<StatusBarItem Grid.Column="0">
+				<TextBlock><Hyperlink NavigateUri="https://stackoverflow.com/questions/11208446/generating-permutations-of-a-set-most-efficiently" RequestNavigate="HyperlinkOnRequestNavigate">StackOverflow related question</Hyperlink></TextBlock>
+			</StatusBarItem>
 
-				<StatusBarItem Grid.Column="1" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
-					<TextBlock HorizontalAlignment="Stretch">Note: ST = Single thread, MT = Multi threads</TextBlock>
-				</StatusBarItem>
+			<StatusBarItem Grid.Column="1" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+				<TextBlock HorizontalAlignment="Stretch">Note: ST = Single thread, MT = Multi threads</TextBlock>
+			</StatusBarItem>
 
-				<StatusBarItem Grid.Column="2"  HorizontalAlignment="Right">
-					<Button Click="ButtonClearResultClick">Clear results</Button>
-				</StatusBarItem>
+			<StatusBarItem Grid.Column="2"  HorizontalAlignment="Right">
+				<StackPanel Orientation="Horizontal">
+					<Button Click="ButtonCopyToClipboard">CopyToClipboard</Button>
+					<Button Click="ButtonClearResultClick" Margin="3,0,0,0">Clear results</Button>
+				</StackPanel>
+			</StatusBarItem>
 
-			</StatusBar>
-		</Grid>
+		</StatusBar>
+	</Grid>
 </Window>

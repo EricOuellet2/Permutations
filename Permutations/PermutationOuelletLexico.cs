@@ -42,7 +42,7 @@ namespace Permutations
 
 			if (sortIndex < 0)
 			{
-				throw new ArgumentException("sortIndex should greater or equal to 0.");
+				throw new ArgumentException("sortIndex is {sortIndex} but should greater or equal to 0.");
 			}
 
 			if (sortIndex >= MaxIndex)

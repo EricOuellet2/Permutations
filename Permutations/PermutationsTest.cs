@@ -22,7 +22,7 @@ namespace Permutations
 
 			int[] values = new int[] { 0, 1, 2, 4 };
 
-			Console.WriteLine("Ouellet heap's algorithm implementation");
+			Console.WriteLine("OuelletHeap heap's algorithm implementation");
 			PermutationOuellet.ForAllPermutation(values, (vals) =>
 			{
 				Console.WriteLine(String.Join("", vals));
@@ -56,7 +56,7 @@ namespace Permutations
 			});
 
 			stopWatch.Stop();
-			Console.WriteLine($"Ouellet heap's algorithm implementation {count} items in {stopWatch.ElapsedMilliseconds} millisecs");
+			Console.WriteLine($"OuelletHeap heap's algorithm implementation {count} items in {stopWatch.ElapsedMilliseconds} millisecs");
 
 			count = 0;
 			stopWatch.Reset();

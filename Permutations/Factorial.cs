@@ -22,9 +22,9 @@ namespace Permutations
 
 		// ************************************************************************
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static long GetFactorial(int val) // a long can only support up to 20!
+		public static long GetFactorial(int val)
 		{
-			if (val > 20)
+			if (val > 20) // a long (64 bits (63 bits signed)) can only support up to 20!
 			{
 				throw new OverflowException($"{nameof(Factorial)} only support a factorial value <= 20");
 			}

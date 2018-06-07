@@ -39,9 +39,21 @@ namespace Permutations
 			if (Model != null)
 			{
 				Model.Results.CollectionChanged += ResultsOnCollectionChanged;
+				Model.PropertyChanged += ModelOnPropertyChanged;
 			}
 		}
 
+		// ************************************************************************
+		private void ModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(MainWindowModel.PlotModel))
+			{
+				PlotViewMain.Model = Model.PlotModel;
+				PlotViewMain.InvalidatePlot();
+			}
+		}
+
+		// ************************************************************************
 		private void ResultsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			if (e.Action == NotifyCollectionChangedAction.Add)
@@ -51,7 +63,7 @@ namespace Permutations
 		}
 
 		// ************************************************************************
-		private async void ButtonBaseOnClick(object sender, RoutedEventArgs e)
+		private async void ButtonStartTestOnClick(object sender, RoutedEventArgs e)
 		{
 			await Model.TestAsync();
 		}
@@ -67,6 +79,25 @@ namespace Permutations
 		{
 			Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
 			e.Handled = true;
+		}
+
+		// ************************************************************************
+		private void ButtonCopyToClipboard(object sender, RoutedEventArgs e)
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach (var item in ListBoxResults.Items)
+			{
+				sb.AppendLine(item.ToString());
+			}
+
+			Clipboard.Clear();
+			Clipboard.SetText(sb.ToString());
+		}
+
+		// ************************************************************************
+		private void ButtonFillGraphicOnClick(object sender, RoutedEventArgs e)
+		{
+			Model.FillTheGraph();
 		}
 
 		// ************************************************************************
