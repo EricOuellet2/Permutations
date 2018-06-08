@@ -36,88 +36,107 @@
 
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"></RowDefinition>
 			<RowDefinition></RowDefinition>
 			<RowDefinition Height="Auto"></RowDefinition>
 		</Grid.RowDefinitions>
 
-		<Grid Grid.Row="0" >
-			<Grid.RowDefinitions>
-				<RowDefinition></RowDefinition>
-				<RowDefinition></RowDefinition>
-				<RowDefinition></RowDefinition>
-				<RowDefinition></RowDefinition>
-			</Grid.RowDefinitions>
+		<Grid Grid.Row ="0">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"></ColumnDefinition>
-				<ColumnDefinition Width="20"></ColumnDefinition>
+				<ColumnDefinition></ColumnDefinition>
+				<ColumnDefinition Width="10"></ColumnDefinition>
 				<ColumnDefinition></ColumnDefinition>
 			</Grid.ColumnDefinitions>
 
-			<TextBlock Grid.Row="0" Grid.Column="0">Count of items to permute:</TextBlock>
-			<StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-				<Slider Value="{Binding CountOfElementsToPermute}" 
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"></RowDefinition>
+					<RowDefinition Height="*"></RowDefinition>
+				</Grid.RowDefinitions>
+
+				<Grid Grid.Row="0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"></RowDefinition>
+						<RowDefinition Height="Auto"></RowDefinition>
+						<RowDefinition></RowDefinition>
+						<RowDefinition Height="Auto"></RowDefinition>
+						<RowDefinition Height="Auto"></RowDefinition>
+					</Grid.RowDefinitions>
+					
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="120"></ColumnDefinition>
+						<ColumnDefinition Width="20"></ColumnDefinition>
+						<ColumnDefinition></ColumnDefinition>
+					</Grid.ColumnDefinitions>
+
+					<TextBlock Grid.Row="0" Grid.Column="0" TextWrapping="Wrap">Count of items to permute:</TextBlock>
+
+					<StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+						<Slider Value="{Binding CountOfElementsToPermute}" 
 						Minimum="1" 
 						Maximum="20" 
 						MinWidth="200" />
-				<TextBox Text="{Binding CountOfElementsToPermute}" Width="40"></TextBox>
-			</StackPanel>
-			<TextBlock Grid.Row="1" Grid.Column="0">Action to do for each permutation:</TextBlock>
-			<ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Source={StaticResource EnumActions}}"
-						SelectedItem="{Binding EnumAction}" HorizontalAlignment="Left"
-						Width="222"></ComboBox>
-			<ListBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding EnumWrapperAlgoPermutation.Items}">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<CheckBox IsChecked="{Binding IsChecked}">
-							<TextBlock Text="{Binding DescriptionOrName}"></TextBlock>
-						</CheckBox>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
+						<TextBox Text="{Binding CountOfElementsToPermute}" Width="40"></TextBox>
+					</StackPanel>
 
-			<StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal">
-				<Button Click="ButtonStartTestOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Start Test</Button>
-				<Button Click="ButtonFillGraphicOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Fill the graph</Button>
-			</StackPanel>
+					<TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap">Action to do for each permutation:</TextBlock>
+					<ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Source={StaticResource EnumActions}}"
+						SelectedItem="{Binding EnumAction}" HorizontalAlignment="Left" Width="222">
+					</ComboBox>
 
-		</Grid>
+					<TextBlock Grid.Row="2" Grid.Column="0" TextWrapping="Wrap">Algorithm implementation:</TextBlock>
+					<ListBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding EnumWrapperAlgoPermutation.Items}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<CheckBox IsChecked="{Binding IsChecked}">
+									<TextBlock Text="{Binding DescriptionOrName}" TextWrapping="Wrap"></TextBlock>
+								</CheckBox>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
 
-		<Grid Grid.Row ="1">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="70*"/>
-				<ColumnDefinition Width="5*"/>
-				<ColumnDefinition Width="248*"/>
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition></RowDefinition>
-				<RowDefinition Height="Auto"></RowDefinition>
-			</Grid.RowDefinitions>
+					<TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch">Note: ST = Single thread, MT = Multi threads</TextBlock>
 
-			<Grid  Grid.ColumnSpan="3">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"></ColumnDefinition>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"></ColumnDefinition>
-				</Grid.ColumnDefinitions>
 
-				<ListBox Name="ListBoxResults" 
-						ItemsSource="{Binding Results}" 
-						IsSynchronizedWithCurrentItem="True"
-						Background="LightYellow" ></ListBox>
+					<StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+						<Button Click="ButtonStartTestOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Start Test</Button>
+						<Button Click="ButtonFillGraphicOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Fill the graph</Button>
+					</StackPanel>
 
-				<GridSplitter Grid.Column="1"
-							  Width="7" 
-							  Background="Gray" 
-							  HorizontalAlignment="Stretch"
-							  ></GridSplitter>
+				</Grid>
 
-				<oxy:PlotView Grid.Column="2" Name="PlotViewMain" />
+				<Grid Grid.Row="1">
+					<Grid.RowDefinitions>
+						<RowDefinition></RowDefinition>
+						<RowDefinition Height="Auto"></RowDefinition>
+					</Grid.RowDefinitions>
+
+					<ListBox Grid.Row="0" Name="ListBoxResults" 
+							 ItemsSource="{Binding Results}" 
+							 IsSynchronizedWithCurrentItem="True"
+							 Background="LightYellow" >
+					</ListBox>
+
+					<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+						<Button Click="ButtonCopyToClipboard">CopyToClipboard</Button>
+						<Button Click="ButtonClearResultClick" Margin="3,0,0,0">Clear results</Button>
+					</StackPanel>
+				</Grid>
+
 
 			</Grid>
+
+			<GridSplitter Grid.Column="1"
+						Width="7" 
+						Background="Gray" 
+						HorizontalAlignment="Stretch"
+			></GridSplitter>
+
+			<Border Grid.Column="2" BorderBrush="Black" BorderThickness="3">
+				<oxy:PlotView Name="PlotViewMain" />
+			</Border>
 		</Grid>
 
-		<StatusBar Grid.Row="2">
+		<StatusBar Grid.Row="1">
 			<StatusBar.ItemsPanel>
 				<ItemsPanelTemplate>
 					<Grid>
@@ -133,18 +152,7 @@
 			<StatusBarItem Grid.Column="0">
 				<TextBlock><Hyperlink NavigateUri="https://stackoverflow.com/questions/11208446/generating-permutations-of-a-set-most-efficiently" RequestNavigate="HyperlinkOnRequestNavigate">StackOverflow related question</Hyperlink></TextBlock>
 			</StatusBarItem>
-
-			<StatusBarItem Grid.Column="1" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
-				<TextBlock HorizontalAlignment="Stretch">Note: ST = Single thread, MT = Multi threads</TextBlock>
-			</StatusBarItem>
-
-			<StatusBarItem Grid.Column="2"  HorizontalAlignment="Right">
-				<StackPanel Orientation="Horizontal">
-					<Button Click="ButtonCopyToClipboard">CopyToClipboard</Button>
-					<Button Click="ButtonClearResultClick" Margin="3,0,0,0">Clear results</Button>
-				</StackPanel>
-			</StatusBarItem>
-
 		</StatusBar>
+
 	</Grid>
 </Window>
