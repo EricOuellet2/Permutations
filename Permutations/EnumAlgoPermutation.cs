@@ -25,11 +25,11 @@ namespace Permutations
 		//[Description("OuelletHeap - Lexicographic/Indexed/Parallelizable v4")]
 		//OuelletIndexedv4 = 16,
 
-		[Description("Sani Singh Huttunen - Fastest ST Lexico (ST, lexico)")]
+		[Description("Huttunen - Fastest ST Lexico (ST, lexico)")]
 		SaniSinghHuttunen = 16,
 
-		[Description("Mix OuelletHeap Indexed3 + Sani Singh Huttunen (ST, lexico)")]
-		OuelletIndexedv3SaniSinghHuttunenST = 32,
+		[Description("OuelletHuttunen - OuelletIndexed3 + Huttunen (ST, lexico)")]
+		OuelletIndexedv3HuttunenST = 32,
 
 		[Description("SimpleVarLex (ST, lexico)")]
 		SimpleVar = 64,
@@ -51,13 +51,13 @@ namespace Permutations
 
 		// Any multihreaded version should be higher than 65536 (2^16)
 
-		[Description("OuelletHeap Indexed1 (MT, not lexico)")]
+		[Description("OuelletIndexed1 MT (MT, not lexico)")]
 		OuelletIndexedMT = 131072,
 
-		[Description("OuelletHeap Indexed3 (MT, not lexico)")]
+		[Description("OuelletIndexed3 MT (MT, not lexico)")]
 		OuelletIndexedv3MT = 262144,
 		
-		[Description("Mix OuelletHeap Indexed3 + Sani Singh Huttunen - Fastest for 2 threads or more (MT, not lexico)")]
-		OuelletIndexedv3SaniSinghHuttunenMT = 524288,
+		[Description("OuelletHuttunen MT - Fastest with 2 threads or more (MT, not lexico)")]
+		OuelletHuttunenMT = 524288,
 	}
 }

@@ -35,7 +35,7 @@ namespace Permutations
 			AlgoPermutation =
 				EnumAlgoPermutation.OuelletHeap |
 				EnumAlgoPermutation.SaniSinghHuttunen |
-				EnumAlgoPermutation.OuelletIndexedv3SaniSinghHuttunenMT;
+				EnumAlgoPermutation.OuelletHuttunenMT;
 			EnumWrapperAlgoPermutation = new EnumWrapperSource(this, nameof(AlgoPermutation));
 		}
 
@@ -523,7 +523,7 @@ namespace Permutations
 					WriteResult(algoPermutationActive, stopwatch);
 				}
 
-				algoPermutationActive = EnumAlgoPermutation.OuelletIndexedv3SaniSinghHuttunenST;
+				algoPermutationActive = EnumAlgoPermutation.OuelletIndexedv3HuttunenST;
 				if (algoPermutation.HasFlag(algoPermutationActive))
 				{
 					WriteIntro(algoPermutationActive);
@@ -700,7 +700,7 @@ namespace Permutations
 					WriteResult(algoPermutationActive, stopwatch);
 				}
 
-				algoPermutationActive = EnumAlgoPermutation.OuelletIndexedv3SaniSinghHuttunenMT;
+				algoPermutationActive = EnumAlgoPermutation.OuelletHuttunenMT;
 				if (algoPermutation.HasFlag(algoPermutationActive))
 				{
 					WriteIntro(algoPermutationActive);
