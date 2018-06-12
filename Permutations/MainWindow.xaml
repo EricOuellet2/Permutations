@@ -98,8 +98,15 @@
 
 
 					<StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-						<Button Click="ButtonStartTestOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Start Test</Button>
-						<Button Click="ButtonFillGraphicOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Fill the graph</Button>
+						<GroupBox Header="Single test" Padding="5">
+							<Button Click="ButtonStartTestOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Start</Button>
+						</GroupBox>
+						<GroupBox Header="Sequence of test from 8 to selected count (chart)" Padding="5" Margin="7,0,0,0">
+							<StackPanel Orientation="Horizontal">
+								<Button Click="ButtonFillGraphicOnClick" HorizontalAlignment="Left" Padding="7,0,7,0">Start</Button>
+								<CheckBox IsChecked="{Binding ShowResultInExcel}" Margin="3,0,0,0">Show result also in Excel</CheckBox>
+							</StackPanel>							
+						</GroupBox>
 					</StackPanel>
 
 				</Grid>

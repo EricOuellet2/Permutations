@@ -12,6 +12,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing;
 using HQ.Util.General;
 using OxyPlot;
 using OxyPlot.Series;
@@ -22,7 +24,7 @@ namespace Permutations
 	public class MainWindowModel : NotifyPropertyChangeBase
 	{
 		private int _count = 0;
-		private int _countOfElementsToPermute = 11;
+		private int _countOfElementsToPermute = 10;
 		private EnumAction _enumAction;
 		private int _testCount = 0;
 
@@ -226,21 +228,46 @@ namespace Permutations
 		}
 
 		// ************************************************************************
+		private bool _showResultInExcel;
+
+		public bool ShowResultInExcel
+		{
+			get { return _showResultInExcel; }
+			set
+			{
+				if (value == _showResultInExcel) return;
+				_showResultInExcel = value;
+				RaisePropertyChanged();
+			}
+		}
+		
+		// ************************************************************************
 		public void FillTheGraph()
 		{
 			Mouse.OverrideCursor = Cursors.Wait;
 
 			Task.Run(() =>
 			{
+				List<EnumAlgoPermutation> sortedEnumAlgoPermutation = null;
+
 				try
 				{
 					_permutationResults = new Dictionary<int, List<PermutationResult>>();
 
 					int maxCountOfElementToPermute = CountOfElementsToPermute;
-					for (CountOfElementsToPermute = 3; CountOfElementsToPermute <= maxCountOfElementToPermute; CountOfElementsToPermute++)
+					for (CountOfElementsToPermute = 8; CountOfElementsToPermute <= maxCountOfElementToPermute; CountOfElementsToPermute++)
 					{
 						RunTest();
 					}
+
+					if (_permutationResults == null || _permutationResults.Count == 0)
+					{
+						MessageBox.Show("The count of items should be equals or greater to 8");
+						return;
+					}
+
+					sortedEnumAlgoPermutation = _permutationResults[maxCountOfElementToPermute].OrderBy(pr => pr.Millisecs).Select(pr => pr.AlgoPermutation).ToList();
+
 
 					CountOfElementsToPermute = maxCountOfElementToPermute;
 
@@ -248,41 +275,113 @@ namespace Permutations
 					plotModel.Title = "Millisecs (y) / Item count (x)";
 					plotModel.LegendPosition = LegendPosition.LeftTop;
 
-					foreach (EnumAlgoPermutation algoPermutationVal in Enum.GetValues(typeof(EnumAlgoPermutation)))
+					foreach (EnumAlgoPermutation algoPermutationVal in sortedEnumAlgoPermutation)
 					{
-						if (AlgoPermutation.HasFlag(algoPermutationVal))
+						var series = new LineSeries
 						{
-							var series = new LineSeries
-							{
-								Title = EnumUtil.GetEnumDescription(algoPermutationVal),
-								MarkerType = MarkerType.Circle,
-								MarkerSize = 3,
-								StrokeThickness = 1
-							};
+							Title = EnumUtil.GetEnumDescription(algoPermutationVal),
+							MarkerType = MarkerType.Circle,
+							MarkerSize = 3,
+							StrokeThickness = 1
+						};
 
-							foreach (var valueCount in _permutationResults.Keys)
+						foreach (var valueCount in _permutationResults.Keys)
+						{
+							PermutationResult result = _permutationResults[valueCount].FirstOrDefault(res => res.AlgoPermutation == algoPermutationVal);
+							if (result != null)
 							{
-								PermutationResult result = _permutationResults[valueCount].FirstOrDefault(res => res.AlgoPermutation == algoPermutationVal);
-								if (result != null)
-								{
-									series.Points.Add(new DataPoint(valueCount, result.Millisecs));
-								}
+								series.Points.Add(new DataPoint(valueCount, result.Millisecs));
 							}
-
-							plotModel.Series.Add(series);
 						}
+
+						plotModel.Series.Add(series);
 					}
 
 					PlotModel = plotModel;
+
+					if (ShowResultInExcel)
+					{
+						CreateExcelFile(_permutationResults, sortedEnumAlgoPermutation);
+					}
 				}
 				finally
 				{
 					Dispatcher.BeginInvoke(
-						DispatcherPriority.ContextIdle, 
-						new Action(()=> Mouse.OverrideCursor = Cursors.Arrow));
+						DispatcherPriority.ContextIdle,
+						new Action(() => Mouse.OverrideCursor = Cursors.Arrow));
 				}
 			});
 		}
+
+		// ************************************************************************
+		private void CreateExcelFile(Dictionary<int, List<PermutationResult>> permutationResults, List<EnumAlgoPermutation>  sortedEnumAlgoPermutation)
+		{
+			var workbook = new XLWorkbook();
+			var ws = workbook.Worksheets.Add("Results");
+
+			int row = 1;
+			int col = 1;
+
+			int minItemCount = permutationResults.Keys.Min();
+			int maxItemCount = permutationResults.Keys.Max();
+
+			Dictionary<int, long> itemCountToSmallestTimeTaken = new Dictionary<int, long>();
+			for (int itemCount = minItemCount; itemCount <= maxItemCount; itemCount++)
+			{
+				itemCountToSmallestTimeTaken.Add(itemCount, permutationResults[itemCount].Min(pr => pr.Millisecs));
+			}
+			
+			// Header
+			ws.Cell(row, col).Value = "Algo";
+			
+			for (int itemCount = minItemCount; itemCount <= maxItemCount; itemCount++)
+			{
+				col++;
+				ws.Cell(row, col).Value = itemCount.ToString() + "!";
+
+				col++;
+				ws.Cell(row, col).Value = itemCount.ToString() + "! Ratio";
+			}
+
+			//Values
+			foreach (EnumAlgoPermutation enumPerm in sortedEnumAlgoPermutation)
+			{
+				row++;
+				col = 1;
+
+				string title = EnumUtil.GetEnumDescription(enumPerm);
+				ws.Cell(row, col).Value = title;
+
+				for (int itemCount = minItemCount; itemCount <= maxItemCount; itemCount++)
+				{
+					foreach (PermutationResult pr in permutationResults[itemCount])
+					{
+						if (pr.AlgoPermutation == enumPerm)
+						{
+							col++;
+
+							ws.Cell(row, col).Value = pr.Millisecs;
+
+							//Ratio
+							col++;
+							double ratio = 0;
+							if (itemCountToSmallestTimeTaken[itemCount] > 0)
+							{
+								 ratio = (double)pr.Millisecs / (double)itemCountToSmallestTimeTaken[itemCount];
+							}
+
+							ws.Cell(row, col).Value = ratio;
+						}
+					}
+				}
+			}
+
+			string path = System.IO.Path.GetTempFileName() + ".xlsx";
+			workbook.SaveAs(path);
+			System.Diagnostics.Process.Start(path);
+		}
+
+		// ************************************************************************
 
 		//series = new LineSeries { Title = title, MarkerType = markerType, MarkerSize = markerSize, StrokeThickness = strokeTickness };
 		//}
@@ -749,9 +848,8 @@ namespace Permutations
 				permutationResultsPerItemCount = new List<PermutationResult>();
 				_permutationResults.Add(CountOfElementsToPermute, permutationResultsPerItemCount);
 			}
+
 			permutationResultsPerItemCount.Add(new PermutationResult(algoPermutationActive, stopWatch.ElapsedMilliseconds));
-
-
 
 			string algo = EnumUtil.GetEnumDescription(algoPermutationActive);
 
