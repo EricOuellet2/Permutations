@@ -10,7 +10,7 @@ namespace Permutations
 	[Flags]
 	public enum EnumAlgoPermutation
 	{
-		[Description("OuelletHeap Heap (ST, not lexico)")]
+		[Description("OuelletHeap (ST, not lexico)")]
 		OuelletHeap = 1,
 
 		[Description("OuelletIndexed1 (ST, not lexico)")]

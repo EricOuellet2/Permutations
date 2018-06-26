@@ -23,6 +23,7 @@ namespace Permutations
 {
 	public class MainWindowModel : NotifyPropertyChangeBase
 	{
+		// ************************************************************************
 		private int _count = 0;
 		private int _countOfElementsToPermute = 12;
 		private EnumAction _enumAction;
