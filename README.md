@@ -12,5 +12,6 @@ Implementation of the fastest multithreaded implementation of an algorithm that 
 The benchmark is done in WPF.
 
 Licence: CPOL (Code Project Open Licence) https://www.codeproject.com/info/cpol10.aspx
+
 I have Sani Singh Huttunen agreement for the licence.
 
